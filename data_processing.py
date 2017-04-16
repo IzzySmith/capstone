@@ -11,7 +11,6 @@ import urllib2
 import time
 import numpy as np
 
-
 adventure_books = 'Adventure'
 filenames = os.listdir(adventure_books)
 
@@ -44,12 +43,46 @@ def retrieve_date(list_file_names, file_path):
             """ 
             if a date is found we create a dict"
             """
-            book_dict[f] = date_match.group(0)
+            date = date_match.group(0)
+            #we remove the newlines
+            cleaned_date = date.strip('\n')
+            #we remove the whitespaces
+            cleaner_date = cleaned_date.strip(' ')
+            #we create a dict with {filename: date}
+            book_dict[f] = cleaner_date
        
         else:
             no_date += 1
           
-    return book_dict, no_date
+    return book_dict
    
-print retrieve_date(sample, adventure_books) 
+dated_books = retrieve_date(sample, adventure_books) 
+
+#test = dated_books.items()[1]
+#print test[1]
+
+#arrange books into decade
+def sort_twenty_tens_decade(input_dict):
+    """
+    takes a dict of the format {filename: date}
+    and creates a list of dicts sorted into the
+    correct decade
+    """
+    twenty_tens_dict={}
+    #we sort the dict into values from lowest to highest
+    #sorted_dates = sorted(input_dict.values())
+    #print [type(i) for i in input_dict.values()]
+    #The input_dict.values() are strings, therefore we will parse
+    # using regex
+    for i in input_dict.items():
+	twenty_tens = re.search(r"(20){1}[0-9]{2}", i[1])
+	if twenty_tens:
+	    twenty_tens_group = twenty_tens.group(0)
+	    twenty_tens_dict[i[0]] = twenty_tens_group
+    return twenty_tens_dict
+	    
+
+print sort_twenty_tens_decade(dated_books)
+
+
 
