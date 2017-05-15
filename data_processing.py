@@ -16,7 +16,7 @@ import numpy as np
 import gensim, logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-"""
+
 adventure_books = 'Adventure'
 fantasy_books = 'Fantasy'
 filenames = os.listdir('books')
@@ -33,7 +33,7 @@ def retrieve_date(list_file_names):
    # takes a list of file names and parses the data to find
    # the date the book was written.
    # returns a dict with {filename:date}
-    
+   # a date is assumed to be 4 numbers with trailing whitespace
     book_dict = {}
     no_date = 0
     for f in list_file_names:
@@ -47,8 +47,8 @@ def retrieve_date(list_file_names):
             read_file = open_file.read()
             open_file.close
             
-            A date is a string of 4 numbers, and usually appears
-            near the beginning of the document
+            #A date is a string of 4 numbers, and usually appears
+            #near the beginning of the document
         
             
             date_match = re.search(r"\s[0-9]{4}\s", read_file)
@@ -77,45 +77,7 @@ print dated_books
 #test = dated_books.items()[1]
 #print test[1]
 
-
-#improve this function later with recursion/ only thing that changes is the
-#century and decade input into the regex
-#arrange books into decade
-def sort_to_decade(input_dict):
-    
-  #  takes a dict of the format {filename: date}
-  #  and creates a list of dicts sorted into the
-  #  correct decade as specified by the input regex
-    
-    #we want to increment the years by one decade at a time
-    #this increment is stored in counter
-    match_exp_dict={}
-    #we sort the dict into values from lowest to highest
-    #sorted_dates = sorted(input_dict.values())
-    #print [type(i) for i in input_dict.values()]
-    #The input_dict.values() are strings, therefore we will parse
-    # using regex
-    #while len(input_dict.items()) > 0:
-    count = 100
-    regex = r'(%s){1}[1-9]{1}' %str(count)
-    while count < 202:
-        for i in input_dict.items():
-            match_exp = re.search(regex, i[1])
-	    if match_exp:
-	        match_exp_group = match_exp.group()
-                #print match_exp.group()
-	        match_exp_dict[i[0]] = match_exp_group
-                #print "match found"
-            else:
-                count +=1
-                #print count 
-    return match_exp_dict
-
-#print sort_to_decade(dated_books)
-
-test_tts = sort_to_decade(dated_books)
-#print test_tts
-
+#sorts the books into decades
 def into_decade(in_dict):
     #dict declarations
     e_zero_d = {}
@@ -210,9 +172,9 @@ decade_dicts = into_decade(dated_books)
 
 def divide_files(input_tuple):
     
-    takes the dict, and opens the associated .txt file
-    and uses the nltk tokenised to tokenise into sentances.
-    it outputs a list of sentances- which is a list of words.
+    #takes the dict, and opens the associated .txt file
+    #and uses the nltk tokenised to tokenise into sentances.
+    #it outputs a list of sentances- which is a list of words.
     
     pos_dict = {}
     sentance_list = []
@@ -290,7 +252,7 @@ def format_groups(in_dict):
     return format_dict    
 
 test_format_groups = format_groups(test_get_rid)
-"""
+
 
 # we create a string of the new words so we can get it back into the
 # correct format for the modelling
@@ -307,7 +269,7 @@ test_format_groups = format_groups(test_get_rid)
 
 #we then need to train a model with word2vec
 
-"""
+
 def create_model(in_dict):
     models = []
     for i in in_dict.items():
@@ -317,7 +279,7 @@ def create_model(in_dict):
         model.save(model_name)
         models.append(model_name)
     return models 
-"""
+
 #test_create_model = create_model(test_format_groups)
 
 #model = gensim.models.Word2Vec(, size=200)
